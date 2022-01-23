@@ -40,10 +40,16 @@
 
                 <StackPanel>
                     <Label HorizontalAlignment="Center">Actual tasks</Label>
-                    <ListBox Height="400" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Tasks}">
+                    <ListBox Height="400" HorizontalContentAlignment="Stretch" x:Name="tasksListBox" 
+                             ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedTask}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Background="#f7f7f7">
+                                    <Grid.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding RelativeSource=
+                                            {RelativeSource AncestorType=Window},
+                                            Path=DataContext.ToggleReminder}"/>
+                                    </Grid.InputBindings>
                                     <StackPanel Orientation="Horizontal">
                                         <Rectangle Width="5" Fill="{Binding Fill}"></Rectangle>
                                         <StackPanel Margin="5">

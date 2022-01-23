@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,11 +16,17 @@ namespace TaskManager.ViewModels
     internal class MainWindowVM : INotifyPropertyChanged
     {
         private bool _stackpanelVisible = false;
+        public BindingList<TaskModel> Tasks { get; } = new() { new("Elsotest", DateTime.Now) };
+        public ICommand ToggleButton => new ToggleButton(toggleTaskAddStackPanel);
+        public ICommand ToggleReminder => new ToggleButton(toggleReminderOnTask);
+        public TaskModel? SelectedTask { get; set; }
 
-        public ObservableCollection<TaskModel> Tasks { get; } = new() { new("Elsotest", DateTime.Now) };
-        public ICommand ToggleButton => new ToggleButton(testaction);
+        public MainWindowVM()
+        {
+            
+        }
 
-        private void testaction(object o)
+        private void toggleTaskAddStackPanel(object o)
         {
             Window window = Application.Current.MainWindow;
             StackPanel sp = (StackPanel)o;
@@ -37,7 +45,17 @@ namespace TaskManager.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private void toggleReminderOnTask(object? o)
+        {
+            if(SelectedTask is not null)
+                SelectedTask.toggleReminder();
+            
+        }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void RaisePropertyChanged(string? sender = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(sender));
+        }
     }
 }
