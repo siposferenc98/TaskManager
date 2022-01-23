@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:TaskManager" xmlns:viewmodels="clr-namespace:TaskManager.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowVM}"
         mc:Ignorable="d"
@@ -26,7 +27,7 @@
                     <Button Command="{Binding ToggleButton}" CommandParameter="{Binding ElementName=addTaskPanel}" Margin="0,5,20,5" Height="50" Width="80" HorizontalAlignment="Right" Content="Add"/>
                 </Grid>
 
-                <StackPanel x:Name="addTaskPanel" Visibility="Visible">
+                <StackPanel x:Name="addTaskPanel" Visibility="Collapsed">
                     <StackPanel>
                         <Label Margin="5">Task name</Label>
                         <TextBox Margin="5" Text="{Binding TaskName,UpdateSourceTrigger=PropertyChanged}"></TextBox>

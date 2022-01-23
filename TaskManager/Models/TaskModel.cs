@@ -12,18 +12,18 @@ namespace TaskManager.Models
 {
     internal class TaskModel : INotifyPropertyChanged
     {
-        private bool _reminder = true;
+        public bool _reminder { get; set; }
 
         public event EventHandler? DeleteTaskEvent;
-        public ToggleButton DeleteTask => new(raiseDelete);
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
         public Brush Fill => _reminder? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
-        public TaskModel( string name, DateTime datetime, bool reminder)
+        public ToggleButton DeleteTask => new(raiseDelete);
+        public TaskModel( string Name, DateTime DateTime, bool _reminder)
         {
-            Name = name;
-            DateTime = datetime;
-            _reminder = reminder;
+            this.Name = Name;
+            this.DateTime = DateTime;
+            this._reminder = _reminder;
         }
 
         public void toggleReminder()

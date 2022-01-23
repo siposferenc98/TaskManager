@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,20 +20,17 @@ namespace TaskManager.ViewModels
         private bool _stackpanelVisible = false;
         public BindingList<TaskModel> Tasks { get; } = new();
 
-        public string TaskName { get; set; }
-        public DateTime TaskDate { get; set; }
+        public string? TaskName { get; set; }
+        public DateTime TaskDate { get; set; } = DateTime.Now;
         public bool SetReminder { get; set; }
         public ICommand AddTask => new ButtonCE(addTask,addTaskCanExecute);
-
         public ICommand ToggleButton => new ToggleButton(toggleTaskAddStackPanel);
         public ICommand ToggleReminder => new ToggleButton(toggleReminderOnTask);
         public TaskModel? SelectedTask { get; set; }
 
         public MainWindowVM()
         {
-            TaskModel test = new("Elsotest", DateTime.Now, false);
-            test.DeleteTaskEvent += deleteTaskFromList!;
-            Tasks.Add(test);
+            jsonReadAll();
         }
 
         #region Toggle task add visibility
@@ -57,7 +56,9 @@ namespace TaskManager.ViewModels
 
         private void addTask(object? o)
         {
-            MessageBox.Show(TaskDate.ToString());
+            TaskModel taskModel = new(TaskName!,TaskDate,SetReminder);
+            taskModel.DeleteTaskEvent += deleteTaskFromList!;
+            Tasks.Add(taskModel);
         }
 
         private bool addTaskCanExecute()
@@ -79,6 +80,19 @@ namespace TaskManager.ViewModels
         {
             TaskModel taskModel = (TaskModel)sender;
             Tasks.Remove(taskModel);
+        }
+
+        private void jsonReadAll()
+        {
+            string jsonfile = File.ReadAllText("./Tasks.json");
+
+            JsonRootClass tasks = JsonSerializer.Deserialize<JsonRootClass>(jsonfile)!;
+            foreach (TaskModel t in tasks.TaskModels)
+            {
+                t.DeleteTaskEvent += deleteTaskFromList!;
+                Tasks.Add(t);
+            }
+            
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
