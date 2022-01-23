@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager" xmlns:viewmodels="clr-namespace:TaskManager.ViewModels"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowVM}"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="600" Height="600" MinWidth="500" Width="500" MaxHeight="1000" MaxWidth="1400"
@@ -27,14 +26,14 @@
                     <Button Command="{Binding ToggleButton}" CommandParameter="{Binding ElementName=addTaskPanel}" Margin="0,5,20,5" Height="50" Width="80" HorizontalAlignment="Right" Content="Add"/>
                 </Grid>
 
-                <StackPanel x:Name="addTaskPanel" Visibility="Collapsed">
+                <StackPanel x:Name="addTaskPanel" Visibility="Visible">
                     <StackPanel>
                         <Label Margin="5">Task name</Label>
-                        <TextBox Margin="5"></TextBox>
-                        <Label Margin="5">Day &amp; Time</Label>
-                        <DatePicker Margin="5"></DatePicker>
-                        <CheckBox Margin="5">Set Reminder</CheckBox>
-                        <Button Margin="5">Save Task</Button>
+                        <TextBox Margin="5" Text="{Binding TaskName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Margin="5">Day</Label>
+                        <DatePicker Margin="5" SelectedDate="{Binding TaskDate, Mode=OneWayToSource}"></DatePicker>
+                        <CheckBox Margin="5" IsChecked="{Binding SetReminder}">Set Reminder</CheckBox>
+                        <Button Margin="5" Command="{Binding AddTask}">Save Task</Button>
                     </StackPanel>
                 </StackPanel>
 
@@ -57,7 +56,7 @@
                                             <TextBlock Text="{Binding DateTime}"></TextBlock>
                                         </StackPanel>
                                     </StackPanel>
-                                    <Button Background="Transparent" BorderThickness="0" Margin="5" Foreground="Red" HorizontalAlignment="Right">&#10006;</Button>
+                                    <Button Background="Transparent" BorderThickness="0" Margin="5" Foreground="Red" HorizontalAlignment="Right" Command="{Binding DeleteTask}">&#10006;</Button>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

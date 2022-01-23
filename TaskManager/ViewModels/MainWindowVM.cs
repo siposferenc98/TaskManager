@@ -16,16 +16,25 @@ namespace TaskManager.ViewModels
     internal class MainWindowVM : INotifyPropertyChanged
     {
         private bool _stackpanelVisible = false;
-        public BindingList<TaskModel> Tasks { get; } = new() { new("Elsotest", DateTime.Now) };
+        public BindingList<TaskModel> Tasks { get; } = new();
+
+        public string TaskName { get; set; }
+        public DateTime TaskDate { get; set; }
+        public bool SetReminder { get; set; }
+        public ICommand AddTask => new ButtonCE(addTask,addTaskCanExecute);
+
         public ICommand ToggleButton => new ToggleButton(toggleTaskAddStackPanel);
         public ICommand ToggleReminder => new ToggleButton(toggleReminderOnTask);
         public TaskModel? SelectedTask { get; set; }
 
         public MainWindowVM()
         {
-            
+            TaskModel test = new("Elsotest", DateTime.Now, false);
+            test.DeleteTaskEvent += deleteTaskFromList!;
+            Tasks.Add(test);
         }
 
+        #region Toggle task add visibility
         private void toggleTaskAddStackPanel(object o)
         {
             Window window = Application.Current.MainWindow;
@@ -44,12 +53,32 @@ namespace TaskManager.ViewModels
                     break;
             }
         }
+        #endregion
+
+        private void addTask(object? o)
+        {
+            MessageBox.Show(TaskDate.ToString());
+        }
+
+        private bool addTaskCanExecute()
+        {
+            if (TaskName is not null and not "")
+                return true;
+
+            return false;
+        }
 
         private void toggleReminderOnTask(object? o)
         {
             if(SelectedTask is not null)
                 SelectedTask.toggleReminder();
             
+        }
+
+        private void deleteTaskFromList(object sender, EventArgs e)
+        {
+            TaskModel taskModel = (TaskModel)sender;
+            Tasks.Remove(taskModel);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -14,15 +14,16 @@ namespace TaskManager.Models
     {
         private bool _reminder = true;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
+        public event EventHandler? DeleteTaskEvent;
+        public ToggleButton DeleteTask => new(raiseDelete);
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
         public Brush Fill => _reminder? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
-        public TaskModel(string name, DateTime datetime)
+        public TaskModel( string name, DateTime datetime, bool reminder)
         {
             Name = name;
             DateTime = datetime;
+            _reminder = reminder;
         }
 
         public void toggleReminder()
@@ -30,6 +31,14 @@ namespace TaskManager.Models
             _reminder = !_reminder;
             RaisePropertyChanged("Fill");
         }
+
+        private void raiseDelete(object? o)
+        {
+            DeleteTaskEvent?.Invoke(this,EventArgs.Empty);
+        }
+
+        //Propertychanged eventhandler + raise
+        public event PropertyChangedEventHandler? PropertyChanged;
         public void RaisePropertyChanged(string? caller = null)
         {
             PropertyChanged?.Invoke(caller, new PropertyChangedEventArgs(caller));
