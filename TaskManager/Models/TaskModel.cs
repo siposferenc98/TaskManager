@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -17,7 +18,9 @@ namespace TaskManager.Models
         public event EventHandler? DeleteTaskEvent;
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
+        [JsonIgnore]
         public Brush Fill => _reminder? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
+        [JsonIgnore]
         public ToggleButton DeleteTask => new(raiseDelete);
         public TaskModel( string Name, DateTime DateTime, bool _reminder)
         {

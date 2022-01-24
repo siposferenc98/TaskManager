@@ -12,20 +12,43 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Text.Json.Serialization;
 
 namespace TaskManager.ViewModels
 {
     internal class MainWindowVM : INotifyPropertyChanged
     {
         private bool _stackpanelVisible = false;
+        private string _date = DateTime.Now.Date.ToString();
+        private int _time = 12;
         public BindingList<TaskModel> Tasks { get; } = new();
 
         public string? TaskName { get; set; }
-        public DateTime TaskDate { get; set; } = DateTime.Now;
+        public string TaskDate
+        {
+            get => _date;
+            set
+            {
+                _date = value;
+                RaisePropertyChanged();
+            }
+        }
+        public int TaskTime 
+        {
+            get => _time; 
+            set 
+            {
+                _time = value;
+                RaisePropertyChanged();
+            } 
+        }
         public bool SetReminder { get; set; }
+
+
         public ICommand AddTask => new ButtonCE(addTask,addTaskCanExecute);
         public ICommand ToggleButton => new ToggleButton(toggleTaskAddStackPanel);
         public ICommand ToggleReminder => new ToggleButton(toggleReminderOnTask);
+
         public TaskModel? SelectedTask { get; set; }
 
         public MainWindowVM()
@@ -42,23 +65,32 @@ namespace TaskManager.ViewModels
             switch(_stackpanelVisible)
             {
                 case true:
-                    window.MinHeight += 200;
+                    window.MinHeight += 250;
                     sp.Visibility = Visibility.Visible;
                     break;
                 case false:
-                    window.MinHeight -= 200;
-                    window.Height = window.ActualHeight <= window.MinHeight + 200 ? window.MinHeight : window.ActualHeight;
+                    window.MinHeight -= 250;
+                    window.Height = window.ActualHeight <= window.MinHeight + 250 ? window.MinHeight : window.ActualHeight;
                     sp.Visibility = Visibility.Collapsed;
                     break;
             }
         }
         #endregion
 
+        public void addTaskToJson(object? sender, CancelEventArgs e)
+        {
+            JsonSerializerOptions options = new() {ReferenceHandler = ReferenceHandler.IgnoreCycles};
+            options.WriteIndented = true;
+            string jsonTask = JsonSerializer.Serialize(Tasks,options);
+            File.WriteAllText("./Tasks.json", jsonTask);
+        }
         private void addTask(object? o)
         {
-            TaskModel taskModel = new(TaskName!,TaskDate,SetReminder);
+            DateTime dateTime = DateTime.Parse($"{TaskDate} {TaskTime}:00");
+            TaskModel taskModel = new(TaskName!,dateTime,SetReminder);
             taskModel.DeleteTaskEvent += deleteTaskFromList!;
             Tasks.Add(taskModel);
+
         }
 
         private bool addTaskCanExecute()
@@ -86,8 +118,8 @@ namespace TaskManager.ViewModels
         {
             string jsonfile = File.ReadAllText("./Tasks.json");
 
-            JsonRootClass tasks = JsonSerializer.Deserialize<JsonRootClass>(jsonfile)!;
-            foreach (TaskModel t in tasks.TaskModels)
+            List<TaskModel> tasks = JsonSerializer.Deserialize<List<TaskModel>>(jsonfile)!;
+            foreach (TaskModel t in tasks)
             {
                 t.DeleteTaskEvent += deleteTaskFromList!;
                 Tasks.Add(t);
@@ -96,7 +128,7 @@ namespace TaskManager.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private void RaisePropertyChanged(string? sender = null)
+        private void RaisePropertyChanged([CallerMemberName]string? sender = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(sender));
         }

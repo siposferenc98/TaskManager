@@ -25,7 +25,9 @@ namespace TaskManager
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowVM();
+            MainWindowVM viewmodel = new();
+            DataContext = viewmodel;
+            Closing += viewmodel.addTaskToJson;
         }
     }
 }

@@ -27,12 +27,20 @@
                     <Button Command="{Binding ToggleButton}" CommandParameter="{Binding ElementName=addTaskPanel}" Margin="0,5,20,5" Height="50" Width="80" HorizontalAlignment="Right" Content="Add"/>
                 </Grid>
 
-                <StackPanel x:Name="addTaskPanel" Visibility="Collapsed">
+                <StackPanel x:Name="addTaskPanel" Visibility="Visible">
                     <StackPanel>
-                        <Label Margin="5">Task name</Label>
-                        <TextBox Margin="5" Text="{Binding TaskName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        <Label Margin="5">Day</Label>
-                        <DatePicker Margin="5" SelectedDate="{Binding TaskDate, Mode=OneWayToSource}"></DatePicker>
+                        <Label Margin="3">Task name</Label>
+                        <TextBox Margin="3" Text="{Binding TaskName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Margin="3" Content="Date:"></Label>
+                        <DatePicker Margin="3" Text="{Binding TaskDate, Mode=OneWayToSource}" SelectedDateFormat="Long"></DatePicker>
+                        <TextBlock Margin="3">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Time: {0}:00">
+                                    <Binding Path="TaskTime"></Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <Slider Minimum="0" Maximum="23" Value="{Binding TaskTime}" IsSnapToTickEnabled="True" TickPlacement="BottomRight" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Margin="3"></Slider>
                         <CheckBox Margin="5" IsChecked="{Binding SetReminder}">Set Reminder</CheckBox>
                         <Button Margin="5" Command="{Binding AddTask}">Save Task</Button>
                     </StackPanel>

@@ -1,14 +1,17 @@
-﻿{
-  "TaskModels":[
-    {
-      "Name": "Első",
-      "DateTime": "2008-09-22T14:01:54.9571247Z",
-      "_reminder": true
-    },
-    {
-      "Name": "Első",
-      "DateTime": "2008-09-22T14:01:54.9571247Z",
-      "_reminder": true
-    }
-  ]
-}
+﻿[
+  {
+    "_reminder": true,
+    "Name": "Els\u0151",
+    "DateTime": "2008-09-22T14:01:54.9571247Z"
+  },
+  {
+    "_reminder": true,
+    "Name": "Els\u0151",
+    "DateTime": "2008-09-22T14:01:54.9571247Z"
+  },
+  {
+    "_reminder": false,
+    "Name": "asd",
+    "DateTime": "2022-01-21T12:00:00"
+  }
+]
