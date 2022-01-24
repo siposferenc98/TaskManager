@@ -13,11 +13,14 @@ namespace TaskManager.Models
 {
     internal class TaskModel : INotifyPropertyChanged
     {
-        public bool _reminder { get; set; }
-
         public event EventHandler? DeleteTaskEvent;
+
+        //Json properties
+        public bool _reminder { get; set; }
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
+
+        //We are ignoring these in the json parsing
         [JsonIgnore]
         public Brush Fill => _reminder? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
         [JsonIgnore]

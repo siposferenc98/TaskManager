@@ -18,11 +18,16 @@ namespace TaskManager.ViewModels
 {
     internal class MainWindowVM : INotifyPropertyChanged
     {
+        #region Private fields
         private bool _stackpanelVisible = false;
         private string _date = DateTime.Now.Date.ToString();
         private int _time = 12;
+        #endregion
+
+        //All of our tasks
         public BindingList<TaskModel> Tasks { get; } = new();
 
+        #region Add task properties
         public string? TaskName { get; set; }
         public string TaskDate
         {
@@ -43,12 +48,15 @@ namespace TaskManager.ViewModels
             } 
         }
         public bool SetReminder { get; set; }
+        #endregion
 
-
+        #region Icommands
         public ICommand AddTask => new ButtonCE(addTask,addTaskCanExecute);
         public ICommand ToggleButton => new ToggleButton(toggleTaskAddStackPanel);
         public ICommand ToggleReminder => new ToggleButton(toggleReminderOnTask);
+        #endregion
 
+        //Binded to listbox selecteditem
         public TaskModel? SelectedTask { get; set; }
 
         public MainWindowVM()
@@ -77,13 +85,15 @@ namespace TaskManager.ViewModels
         }
         #endregion
 
+        #region Closing method
         public void addTaskToJson(object? sender, CancelEventArgs e)
-        {
-            JsonSerializerOptions options = new() {ReferenceHandler = ReferenceHandler.IgnoreCycles};
-            options.WriteIndented = true;
-            string jsonTask = JsonSerializer.Serialize(Tasks,options);
+        { 
+            string jsonTask = JsonSerializer.Serialize(Tasks);
             File.WriteAllText("./Tasks.json", jsonTask);
         }
+        #endregion
+
+        #region Add Task
         private void addTask(object? o)
         {
             DateTime dateTime = DateTime.Parse($"{TaskDate} {TaskTime}:00");
@@ -100,20 +110,25 @@ namespace TaskManager.ViewModels
 
             return false;
         }
+        #endregion
 
+        #region Toggle reminder
         private void toggleReminderOnTask(object? o)
         {
             if(SelectedTask is not null)
                 SelectedTask.toggleReminder();
-            
         }
+        #endregion
 
+        #region Delete Task
         private void deleteTaskFromList(object sender, EventArgs e)
         {
             TaskModel taskModel = (TaskModel)sender;
             Tasks.Remove(taskModel);
         }
+        #endregion
 
+        #region Startup method
         private void jsonReadAll()
         {
             string jsonfile = File.ReadAllText("./Tasks.json");
@@ -126,11 +141,14 @@ namespace TaskManager.ViewModels
             }
             
         }
+        #endregion
 
+        #region Property changed region
         public event PropertyChangedEventHandler? PropertyChanged;
         private void RaisePropertyChanged([CallerMemberName]string? sender = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(sender));
         }
+        #endregion
     }
 }

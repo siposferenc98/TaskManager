@@ -27,7 +27,7 @@
                     <Button Command="{Binding ToggleButton}" CommandParameter="{Binding ElementName=addTaskPanel}" Margin="0,5,20,5" Height="50" Width="80" HorizontalAlignment="Right" Content="Add"/>
                 </Grid>
 
-                <StackPanel x:Name="addTaskPanel" Visibility="Visible">
+                <StackPanel x:Name="addTaskPanel" Visibility="Collapsed">
                     <StackPanel>
                         <Label Margin="3">Task name</Label>
                         <TextBox Margin="3" Text="{Binding TaskName,UpdateSourceTrigger=PropertyChanged}"></TextBox>

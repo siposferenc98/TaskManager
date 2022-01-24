@@ -5,6 +5,8 @@ namespace TaskManager.Models
     internal class ToggleButton : ICommand
     {
         Action<object> Action;
+
+        //This button will execute anyways so this eventhandler is unused.
         public event EventHandler? CanExecuteChanged;
 
         public ToggleButton(Action<object> a)
