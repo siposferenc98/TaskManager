@@ -1,17 +1,32 @@
 ﻿[
   {
-    "_reminder": true,
-    "Name": "Els\u0151",
-    "DateTime": "2008-09-22T14:01:54.9571247Z"
+    "Id": "eaa80642-ca53-471a-bc06-4e01b7529181",
+    "Name": "dfgdfg",
+    "DateTime": "2022-01-25T12:00:00",
+    "Reminder": false
   },
   {
-    "_reminder": true,
-    "Name": "Els\u0151",
-    "DateTime": "2008-09-22T14:01:54.9571247Z"
+    "Id": "f9bf5b58-a4a4-43f3-b409-a041074d8039",
+    "Name": "testest",
+    "DateTime": "2022-01-29T13:00:00",
+    "Reminder": false
   },
   {
-    "_reminder": false,
-    "Name": "asd",
-    "DateTime": "2022-01-21T12:00:00"
+    "Id": "0bd8a45a-793f-4f2d-964e-58f078573236",
+    "Name": "dfgdfgdfg",
+    "DateTime": "2022-01-26T12:00:00",
+    "Reminder": false
+  },
+  {
+    "Id": "e5e8b025-3115-4253-8c7b-a9837268cfe7",
+    "Name": "tes1sd",
+    "DateTime": "2022-01-29T02:00:00",
+    "Reminder": true
+  },
+  {
+    "Id": "ef670acb-18c0-4c00-869c-3016313e31f8",
+    "Name": "fsdfsdf",
+    "DateTime": "2022-01-25T13:00:00",
+    "Reminder": false
   }
 ]
