@@ -32,45 +32,39 @@ namespace TaskManager.Models
             this.Name = Name;
             this.DateTime = DateTime;
             this.Reminder = Reminder;
+            checkNotification();
         }
 
         public void toggleReminder()
         {
             Reminder = !Reminder;
+            checkNotification();
             RaisePropertyChanged("Fill");
-            if (Reminder)
-            {
-                addToastNotification();
-            }
-            else
-            {
-                removeToastNotification();
-            }
-
         }
 
-        private void addToastNotification()
+        public void checkNotification(bool deletingTask = false)
         {
-            new ToastContentBuilder()
-                .AddText(Name)
-                .Schedule(DateTime.Now.AddSeconds(60), notif =>
+            IReadOnlyList<ScheduledToastNotification> scheduledToastNotifications  = ToastNotifications.notifier.GetScheduledToastNotifications();
+            ScheduledToastNotification? notificationForThisTask = scheduledToastNotifications.FirstOrDefault(x => x.Tag == Id.ToString());
+
+            if(!deletingTask)
+            {
+                if (Reminder && notificationForThisTask is null && DateTime > DateTime.Now)
                 {
-                    notif.Tag = Id.ToString();
-                });
-        }
-
-        private void removeToastNotification()
-        {
-            ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
-
-            IReadOnlyList<ScheduledToastNotification> scheduledNotifications = notifier.GetScheduledToastNotifications();
-
-            ScheduledToastNotification? removedNotif = scheduledNotifications.FirstOrDefault(x => x.Tag == Id.ToString());
-            if (removedNotif is not null)
-            {
-                notifier.RemoveFromSchedule(removedNotif);
+                    ToastNotifications.addToastNotification(this);
+                }
+                else if(!Reminder && notificationForThisTask is not null)
+                {
+                    ToastNotifications.notifier.RemoveFromSchedule(notificationForThisTask);
+                }
             }
+            else if(deletingTask && notificationForThisTask is not null)
+            {
+                ToastNotifications.notifier.RemoveFromSchedule(notificationForThisTask);
+            }
+            
         }
+        
 
         private void raiseDelete(object? o)
         {

@@ -29,10 +29,10 @@
 
                 <StackPanel x:Name="addTaskPanel" Visibility="Collapsed">
                     <StackPanel>
-                        <Label Margin="3">Task name</Label>
+                        <Label Margin="3">Task name:</Label>
                         <TextBox Margin="3" Text="{Binding TaskName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Margin="3" Content="Date:"></Label>
-                        <DatePicker Margin="3" Text="{Binding TaskDate, Mode=OneWayToSource}" SelectedDateFormat="Long"></DatePicker>
+                        <DatePicker Margin="3" Text="{Binding TaskDate, Mode=OneWayToSource}" SelectedDateFormat="Short"></DatePicker>
                         <TextBlock Margin="3">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="Time: {0}:00">

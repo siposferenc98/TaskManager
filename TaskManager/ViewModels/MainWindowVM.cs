@@ -20,6 +20,7 @@ namespace TaskManager.ViewModels
     {
         #region Private fields
         private bool _stackpanelVisible = false;
+        private string _name = string.Empty;
         private string _date = DateTime.Now.Date.ToString();
         private int _time = 12;
         #endregion
@@ -29,7 +30,15 @@ namespace TaskManager.ViewModels
         private List<ToastContentBuilder> toastNotifications = new();
 
         #region Add task properties
-        public string? TaskName { get; set; }
+        public string TaskName 
+        { 
+            get => _name;
+            set 
+            {
+                _name = value;
+                RaisePropertyChanged();
+            }
+        }
         public string TaskDate
         {
             get => _date;
@@ -63,8 +72,6 @@ namespace TaskManager.ViewModels
         public MainWindowVM()
         {
             jsonReadAll();
-            //buildReminderNotifications();
-            //buildToastNotification(Tasks.First());
         }
 
 
@@ -109,6 +116,10 @@ namespace TaskManager.ViewModels
             taskModel.DeleteTaskEvent += deleteTaskFromList!;
             Tasks.Add(taskModel);
 
+            TaskName = string.Empty;
+            TaskDate = DateTime.Now.Date.ToString();
+            TaskTime = 12;
+
         }
 
         private bool addTaskCanExecute()
@@ -133,6 +144,8 @@ namespace TaskManager.ViewModels
         {
             TaskModel taskModel = (TaskModel)sender;
             Tasks.Remove(taskModel);
+            if (taskModel.Reminder)
+                taskModel.checkNotification(deletingTask: true);
         }
         #endregion
 
