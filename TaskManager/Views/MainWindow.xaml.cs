@@ -1,6 +1,8 @@
 ﻿global using TaskManager.Models;
 global using TaskManager.ViewModels;
 global using System.Windows.Input;
+global using Microsoft.Toolkit.Uwp.Notifications;
+global using Windows.UI.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;

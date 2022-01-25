@@ -26,6 +26,7 @@ namespace TaskManager.ViewModels
 
         //All of our tasks
         public BindingList<TaskModel> Tasks { get; } = new();
+        private List<ToastContentBuilder> toastNotifications = new();
 
         #region Add task properties
         public string? TaskName { get; set; }
@@ -62,7 +63,10 @@ namespace TaskManager.ViewModels
         public MainWindowVM()
         {
             jsonReadAll();
+            //buildReminderNotifications();
+            //buildToastNotification(Tasks.First());
         }
+
 
         #region Toggle task add visibility
         private void toggleTaskAddStackPanel(object o)
@@ -87,8 +91,12 @@ namespace TaskManager.ViewModels
 
         #region Closing method
         public void addTaskToJson(object? sender, CancelEventArgs e)
-        { 
-            string jsonTask = JsonSerializer.Serialize(Tasks);
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            };
+            string jsonTask = JsonSerializer.Serialize(Tasks,options);
             File.WriteAllText("./Tasks.json", jsonTask);
         }
         #endregion
@@ -97,7 +105,7 @@ namespace TaskManager.ViewModels
         private void addTask(object? o)
         {
             DateTime dateTime = DateTime.Parse($"{TaskDate} {TaskTime}:00");
-            TaskModel taskModel = new(TaskName!,dateTime,SetReminder);
+            TaskModel taskModel = new(Guid.NewGuid(),TaskName!,dateTime,SetReminder);
             taskModel.DeleteTaskEvent += deleteTaskFromList!;
             Tasks.Add(taskModel);
 

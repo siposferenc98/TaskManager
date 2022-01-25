@@ -16,26 +16,60 @@ namespace TaskManager.Models
         public event EventHandler? DeleteTaskEvent;
 
         //Json properties
-        public bool _reminder { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
+        public bool Reminder { get; set; }
 
         //We are ignoring these in the json parsing
         [JsonIgnore]
-        public Brush Fill => _reminder? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
+        public Brush Fill => Reminder? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
         [JsonIgnore]
         public ToggleButton DeleteTask => new(raiseDelete);
-        public TaskModel( string Name, DateTime DateTime, bool _reminder)
+        public TaskModel(Guid Id, string Name, DateTime DateTime, bool Reminder)
         {
+            this.Id = Id;
             this.Name = Name;
             this.DateTime = DateTime;
-            this._reminder = _reminder;
+            this.Reminder = Reminder;
         }
 
         public void toggleReminder()
         {
-            _reminder = !_reminder;
+            Reminder = !Reminder;
             RaisePropertyChanged("Fill");
+            if (Reminder)
+            {
+                addToastNotification();
+            }
+            else
+            {
+                removeToastNotification();
+            }
+
+        }
+
+        private void addToastNotification()
+        {
+            new ToastContentBuilder()
+                .AddText(Name)
+                .Schedule(DateTime.Now.AddSeconds(60), notif =>
+                {
+                    notif.Tag = Id.ToString();
+                });
+        }
+
+        private void removeToastNotification()
+        {
+            ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
+
+            IReadOnlyList<ScheduledToastNotification> scheduledNotifications = notifier.GetScheduledToastNotifications();
+
+            ScheduledToastNotification? removedNotif = scheduledNotifications.FirstOrDefault(x => x.Tag == Id.ToString());
+            if (removedNotif is not null)
+            {
+                notifier.RemoveFromSchedule(removedNotif);
+            }
         }
 
         private void raiseDelete(object? o)
