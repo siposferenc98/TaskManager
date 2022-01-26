@@ -15,6 +15,7 @@ namespace TaskManager.Models
         {
             new ToastContentBuilder()
                 .AddText(taskModel.Name)
+                .AddText(taskModel.DateTime.ToString())
                 .Schedule(new DateTimeOffset(taskModel.DateTime), notif =>
                 {
                     notif.Tag = taskModel.Id.ToString();

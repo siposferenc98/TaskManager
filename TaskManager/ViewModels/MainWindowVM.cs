@@ -27,7 +27,6 @@ namespace TaskManager.ViewModels
 
         //All of our tasks
         public BindingList<TaskModel> Tasks { get; } = new();
-        private List<ToastContentBuilder> toastNotifications = new();
 
         #region Add task properties
         public string TaskName 
