@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:TaskManager" xmlns:viewmodels="clr-namespace:TaskManager.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowVM}"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="600" Height="600" MinWidth="500" Width="500" MaxHeight="1000" MaxWidth="1400"
+        Title="Task manager" MinHeight="600" Height="600" MinWidth="500" Width="500" MaxHeight="1000" MaxWidth="1400"
         x:Name="Mainw">
     <Window.Resources>
         <Style TargetType="StackPanel">

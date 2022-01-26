@@ -21,7 +21,7 @@ namespace TaskManager.ViewModels
         #region Private fields
         private bool _stackpanelVisible = false;
         private string _name = string.Empty;
-        private string _date = DateTime.Now.Date.ToString();
+        private string _date = string.Empty;
         private int _time = 12;
         #endregion
 
@@ -116,7 +116,6 @@ namespace TaskManager.ViewModels
             Tasks.Add(taskModel);
 
             TaskName = string.Empty;
-            TaskDate = DateTime.Now.Date.ToString();
             TaskTime = 12;
 
         }
